@@ -1,6 +1,7 @@
-import { Document, Schema } from "mongoose";
+import { Schema } from "mongoose";
 
-export interface ISItem extends Document {
+export interface ISItem {
+    _id?: Schema.Types.ObjectId,
     name: string,
     consumerPrice: number,
     stock: number,
