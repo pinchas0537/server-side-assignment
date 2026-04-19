@@ -2,6 +2,7 @@ import { Item } from "../models/Item.js";
 import { IItemBase } from "../validations/item.validation.js";
 import { ISItem } from "../interfaces/Item.js";
 import { ISupplier, ISupplierItem } from "../interfaces/Supplier.js";
+import { Types } from "mongoose";
 
 export async function createNewItem(itemData: IItemBase): Promise<ISItem> {
     try {
@@ -51,5 +52,14 @@ export const updateItemInDB = async (id: string, updateData: Partial<IItemBase>)
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to update item: ${errorMessage}`);
+    }
+};
+
+export const deleteItemById = async (item: Document & ISItem): Promise<void> => {
+    try {
+        await Item.deleteOne({ _id: item._id });
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        throw new Error(`Failed to delete item: ${errorMessage}`);
     }
 };

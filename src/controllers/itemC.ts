@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createNewItem, getAllItems, updateItemInDB, verifyProfitMargin } from "../services/itemS.js";
+import { createNewItem, deleteItemById, getAllItems, updateItemInDB, verifyProfitMargin } from "../services/itemS.js";
 import logger from "../utils/Logger.js";
 import { IItemBase } from "../validations/item.validation.js";
 import { ISupplier } from "../interfaces/Supplier.js";
@@ -56,6 +56,17 @@ export const updateItem = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json(updatedItem);
     } catch (error) {
         logger.error("Failed to update item", { error: (error as Error).message, body: req.body });
+        res.status(400).json({ error: (error as Error).message });
+    }
+};
+
+export const deleteItem = async (_req: Request, res: Response): Promise<void> => {
+    try {
+        const item = res.locals.item as Document & ISItem;
+        const deletedItem = await deleteItemById(item);
+        res.status(200).json(deletedItem);
+    } catch (error) {
+        logger.error("Failed to delete item", { error: (error as Error).message });
         res.status(400).json({ error: (error as Error).message });
     }
 };
