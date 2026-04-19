@@ -2,7 +2,6 @@ import { Item } from "../models/Item.js";
 import { IItemBase } from "../validations/item.validation.js";
 import { ISItem } from "../interfaces/Item.js";
 import { ISupplier, ISupplierItem } from "../interfaces/Supplier.js";
-import { Types } from "mongoose";
 
 export async function createNewItem(itemData: IItemBase): Promise<ISItem> {
     try {

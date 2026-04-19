@@ -3,6 +3,7 @@ import { connectDB } from "./config/db";
 import orderR from "./routers/orderR";
 import logger from "./utils/Logger";
 import itemR from "./routers/itemR";
+import supplierR from "./routers/supplierR";
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use((req: express.Request, _res: express.Response, next: express.NextFunctio
 app.use("/api/orders", orderR)
 
 app.use("/api/items", itemR)
+
+app.use("/api/suppliers", supplierR)
 
 async function startServer() {
     try {
