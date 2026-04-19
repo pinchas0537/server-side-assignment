@@ -21,12 +21,12 @@ export const isNsameUnique = async(req: Request, res: Response, next: NextFuncti
 
 export async function supplierExists(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const supplierId = req.body.supplierId || req.params.supplierId;
-        if (!supplierId) {
+        const id = req.params.id || req.body.id ;
+        if (!id) {
             res.status(400).json({ error: "Supplier ID is required" });
             return;
         }
-        const supplier = await getSupplierById(supplierId);
+        const supplier = await getSupplierById(id);
         if (!supplier) {
             res.status(404).json({ error: "Supplier not found" });
             return;

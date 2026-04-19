@@ -11,9 +11,18 @@ export const createNewSupplier = async (supplierData: Partial<ISupplier>): Promi
     }
 };
 
+export const getAllSuppliers = async (): Promise<ISupplier[]> => {
+    try {
+        return await Supplier.find().select("-__v").lean();
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        throw new Error(`Failed to fetch suppliers: ${errorMessage}`);
+    }
+};
+
 export const getSupplierById = async (id: string): Promise<ISupplier | null> => {
     try {
-        return await Supplier.findById(id);
+        return await Supplier.findById(id).select("-__v").lean();
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to fetch supplier: ${errorMessage}`);
@@ -22,9 +31,29 @@ export const getSupplierById = async (id: string): Promise<ISupplier | null> => 
 
 export const getSupplierByName = async (name: string): Promise<ISupplier | null> => {
     try {
-        return await Supplier.findOne({ name });
+        return await Supplier.findOne({ name }).select("-__v").lean();
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to fetch supplier: ${errorMessage}`);
+    }
+};
+
+export const updateSupplierInDB = async (id: string, updateData: Partial<ISupplier>): Promise<ISupplier | null> => {
+    try {
+        return await Supplier.findByIdAndUpdate(id, updateData, { new: true, runValidators: true })
+            .select("-__v")
+            .lean();
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        throw new Error(`Failed to update supplier: ${errorMessage}`);
+    }
+};
+
+export const deleteSupplierById = async (id: string): Promise<ISupplier | null> => {
+    try {
+        return await Supplier.findByIdAndDelete(id).select("-__v").lean();
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        throw new Error(`Failed to delete supplier: ${errorMessage}`);
     }
 };

@@ -28,7 +28,7 @@ export async function processNewOrder(orderData: IOrder): Promise<IOrder> {
 
 export async function getAllOrders(): Promise<IOrder[]> {
     try {
-        const orders = await OrderModel.find().lean();
+        const orders = await OrderModel.find().select("-__v").lean();
         return orders;
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -39,7 +39,7 @@ export async function getAllOrders(): Promise<IOrder[]> {
 
 export async function getOrderById(orderId: string): Promise<IOrder | null> {
     try {
-        const order = await OrderModel.findById(orderId).lean();
+        const order = await OrderModel.findById(orderId).select("-__v").lean();
         if (!order) {
             return null;
         }
