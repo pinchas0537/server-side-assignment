@@ -10,7 +10,7 @@ const PORT = 3000;
 
 app.use(express.json());
 
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((req: express.Request, _res: express.Response, next: express.NextFunction) => {
     logger.info("Incoming request", { method: req.method, url: req.url ,IP: req.ip} );
     next();
 });

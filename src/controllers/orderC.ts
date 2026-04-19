@@ -15,7 +15,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     }
 }
 
-export async function AllOrders(res: Response): Promise<void> {
+export async function AllOrders(_req: Request, res: Response): Promise<void> {
     try {
         const orders = await getAllOrders()
         res.json(orders);

@@ -23,7 +23,7 @@ export async function validateOrderItems(req: Request, res: Response, next: Next
             return;
         }
         res.locals.dbItems = dbItems;
-        next();
+        return next();
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
     }

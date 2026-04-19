@@ -7,7 +7,7 @@ export const validateRequest =
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             schema.parse(req.body);
-            next();
+            return next();
         } catch (error) {
             if (error instanceof ZodError) {
                 logger.error(`Validation failed: ${JSON.stringify(error.issues)}`);
