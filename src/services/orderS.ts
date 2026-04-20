@@ -1,5 +1,4 @@
 import { IOrder } from "../interfaces/Order.js";
-import { Item } from "../models/Item.js";
 import { OrderModel } from "../models/Order.js";
 import { getValidatedProfit, updateItemStock } from "../utils/orderHelpers.js";
 
