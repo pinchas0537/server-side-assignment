@@ -2,18 +2,18 @@ import { Router } from "express";
 import { AllOrders, createOrder, deleteOrder, getById, updateOrder } from "../controllers/orderC.js";
 import { validateOrderItems } from "../middleware/validateOrderItems.js";
 import { validateRequest } from "../middleware/validate.js";
-import { createOrderSchema, updateOrderSchema, orderIdSchema} from "../validations/order.validation.js";
+import { orderValidationSchema } from "../validations/order.validation.js";
 
 const router = Router();
 
-router.post("/", validateRequest(createOrderSchema), validateOrderItems, createOrder);
+router.post("/", validateRequest(orderValidationSchema), validateOrderItems, createOrder);
 
 router.get("/", AllOrders);
 
-router.get("/:id",validateRequest(orderIdSchema), getById);
+router.get("/:id", getById);
 
-router.put("/:id", validateRequest(updateOrderSchema), validateOrderItems, updateOrder);
+router.put("/:id", validateRequest(orderValidationSchema), validateOrderItems, updateOrder);
 
-router.delete("/:id",validateRequest(orderIdSchema), deleteOrder);
+router.delete("/:id", deleteOrder);
 
 export default router;
