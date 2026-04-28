@@ -10,16 +10,19 @@ const itemValidationSchema = z.object({
 });
 
 export const createItemSchema = z.object({
-    body: itemValidationSchema
+    body: itemValidationSchema,
 });
 
 export const updateItemSchema = z.object({
     params: paramsIdSchema,
-    body: itemValidationSchema.partial()
+    body: itemValidationSchema.partial().refine(
+        (body)=> Object.keys(body).length > 0,
+        { message: "At least one field must be provided for update" }
+    ),
 });
 
 export const itemIdSchema = z.object({
-    params: paramsIdSchema
+    params: paramsIdSchema,
 });
 
-export type IItemBase = z.infer<typeof itemValidationSchema>;
+export type ItemBase = z.infer<typeof itemValidationSchema>;

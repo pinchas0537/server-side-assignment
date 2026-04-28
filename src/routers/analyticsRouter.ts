@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { getDailyTopItem, getItemMargins, getMonthlyRevenue, getMostProfitableSupplier, getWeeklyTopCategory } from "../controllers/AnalyticsController.js";
+import {
+    getDailyTopItem,
+    getItemMargins,
+    getMonthlyRevenue,
+    getMostProfitableSupplier,
+    getWeeklyTopCategory,
+} from "../controllers/Analytics.controller.js";
 
 const router = Router();
 

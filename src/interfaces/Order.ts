@@ -1,11 +1,16 @@
-import { Schema } from "mongoose";
-import { IOrderBase } from "../validations/order.validation";
-interface IOrderItem {
-    itemId: Schema.Types.ObjectId,
-    quantity: number
+import { Schema, Types } from "mongoose";
+import { OrderBase } from "../validations/order.validation";
+export interface IOrderItem {
+    itemId: Schema.Types.ObjectId;
+    quantity: number;
 }
-export interface IOrder extends Omit<IOrderBase, 'items'> {
-    _id?: Schema.Types.ObjectId,
-    items: IOrderItem[],
-    orderDate?: Date,
+export interface IOrder extends Omit<OrderBase, "items"> {
+    _id?: Schema.Types.ObjectId;
+    items: IOrderItem[];
+    orderDate: Date;
+}
+
+export interface IOrderItemInput {
+    itemId: string | Types.ObjectId;
+    quantity: number;
 }

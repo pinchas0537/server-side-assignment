@@ -1,31 +1,36 @@
-import { Request, Response } from "express";
-import { IOrderBase } from "../validations/order.validation.js";
-import { deleteOrderById, getAllOrders, getOrderById, processNewOrder, updateOrderInDB } from "../services/orderS.js";
-import { IOrder } from "../interfaces/Order.js";
+import { NextFunction, Request, Response } from "express";
+import { OrderBase } from "../validations/order.validation.js";
+import {
+    deleteOrderById,
+    getAllOrdersInDB,
+    getOrderById,
+    processNewOrder,
+    updateOrderInDB,
+} from "../services/orderService.js";
 import logger from "../utils/Logger.js";
 
-export const createOrder = async (req: Request, res: Response): Promise<void> => {
+export const createOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const orderData: IOrderBase = req.body;
-        const createdOrder = await processNewOrder(orderData as unknown as IOrder);
+        const orderData: OrderBase = req.body;
+        const createdOrder = await processNewOrder(orderData);
         res.status(201).json(createdOrder);
     } catch (error) {
         logger.error("Failed to create order", { error: (error as Error).message });
-        res.status(400).json({ error: (error as Error).message });
+        next(error);
     }
 };
 
-export const AllOrders = async (_req: Request, res: Response): Promise<void> => {
+export const getAllOrders = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const orders = await getAllOrders();
+        const orders = await getAllOrdersInDB();
         res.json(orders);
     } catch (error) {
         logger.error("Failed to get all orders", { error: (error as Error).message });
-        res.status(500).json({ error: (error as Error).message });
+        next(error);
     }
 };
 
-export const getById = async (req: Request, res: Response): Promise<void> => {
+export const getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const orderId = req.params.id as string;
         const orders = await getOrderById(orderId);
@@ -36,15 +41,15 @@ export const getById = async (req: Request, res: Response): Promise<void> => {
         res.json(orders);
     } catch (error) {
         logger.error(`Failed to get order with ID ${req.params.id}`, { error: (error as Error).message });
-        res.status(500).json({ error: (error as Error).message });
+        next(error);
     }
 };
 
-export const updateOrder = async (req: Request, res: Response): Promise<void> => {
+export const updateOrder = async (req: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const orderId = req.params.id as string;
-        const orderData: IOrderBase = req.body;
-        const updatedOrder = await updateOrderInDB(orderId, orderData as unknown as IOrder);
+        const { id } = req.params;
+        const orderData: OrderBase = req.body;
+        const updatedOrder = await updateOrderInDB(id, orderData);
         if (updatedOrder === null) {
             res.status(404).json({ error: "Order not found" });
             return;
@@ -52,11 +57,11 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
         res.json(updatedOrder);
     } catch (error) {
         logger.error(`Failed to update order with ID ${req.params.id}`, { error: (error as Error).message });
-        res.status(400).json({ error: (error as Error).message });
+        next(error);
     }
 };
 
-export const deleteOrder = async (req: Request, res: Response): Promise<void> => {
+export const deleteOrder = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const orderId = req.params.id as string;
         const deletedOrder = await deleteOrderById(orderId);
@@ -67,6 +72,6 @@ export const deleteOrder = async (req: Request, res: Response): Promise<void> =>
         res.json(deletedOrder);
     } catch (error) {
         logger.error(`Failed to delete order with ID ${req.params.id}`, { error: (error as Error).message });
-        res.status(500).json({ error: (error as Error).message });
+        next(error);
     }
 };

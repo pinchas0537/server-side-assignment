@@ -1,11 +1,13 @@
 import { Item } from "../models/Item.js";
-import { IItemBase } from "../validations/item.validation.js";
+import { ItemBase } from "../validations/item.validation.js";
 import { ISItem } from "../interfaces/Item.js";
 import { ISupplier, ISupplierItem } from "../interfaces/Supplier.js";
+import { CustomError } from "../interfaces/Error.js";
+import { SUPPLIER_MARKUP_FACTOR } from "../utils/constants.js";
 
-export const createNewItem = async (itemData: IItemBase): Promise<ISItem> => {
+export const createNewItem = async (itemData: ItemBase): Promise<ISItem> => {
     try {
-        const newItem = new Item(itemData as unknown as ISItem);
+        const newItem = new Item(itemData);
         return await newItem.save();
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -13,12 +15,12 @@ export const createNewItem = async (itemData: IItemBase): Promise<ISItem> => {
     }
 };
 
-export const getAllItems = async (): Promise<ISItem[]> => {
+export const getAllItemsInDB = async (): Promise<ISItem[]> => {
     try {
         return await Item.find().populate("supplierId", "-__v").select("-__v").lean();
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-        throw new Error(`Failed to fetch items: ${errorMessage}`);
+        throw new Error(`Failed to get All items: ${errorMessage}`);
     }
 };
 
@@ -27,7 +29,7 @@ export const getItemById = async (itemId: string): Promise<ISItem | null> => {
         return await Item.findById(itemId).populate("supplierId");
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-        throw new Error(`Failed to fetch item: ${errorMessage}`);
+        throw new Error(`Failed to get item by id: ${errorMessage}`);
     }
 };
 
@@ -38,7 +40,7 @@ export const verifyProfitMargin = (item: { name: string; supplierId: ISupplier }
         if (!supplierItem) {
             throw new Error(`Item ${item.name} not found in supplier's catalog`);
         }
-        const minPrice = supplierItem.price * 1.3;
+        const minPrice = supplierItem.price * SUPPLIER_MARKUP_FACTOR;
         if (newPrice < minPrice) {
             throw new Error(
                 `Price too low. According to store rules, price must be at least 30% above supplier price (${minPrice.toFixed(2)})`
@@ -46,22 +48,31 @@ export const verifyProfitMargin = (item: { name: string; supplierId: ISupplier }
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-        throw new Error(`Failed to fetch item: ${errorMessage}`);
+        throw new Error(`Failed to verify Profit Margin item: ${errorMessage}`);
     }
 };
 
-export const updateItemInDB = async (id: string, updateData: Partial<IItemBase>): Promise<ISItem | null> => {
+export const updateItemInDB = async (id: string, updateData: Partial<ItemBase>): Promise<ISItem | null> => {
     try {
-        return await Item.findByIdAndUpdate(id, updateData, { new: true });
+        const updatedItem = await Item.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedItem) {
+            const error = new Error("Item not found") as CustomError;
+            error.statusCode = 404;
+            throw error;
+        }
+        return updatedItem;
     } catch (error: unknown) {
+        if ((error as CustomError).statusCode === 404) {
+            throw error;
+        }
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to update item: ${errorMessage}`);
     }
 };
 
-export const deleteItemById = async (item: Document & ISItem): Promise<void> => {
+export const deleteItemById = async (itemId: string): Promise<void> => {
     try {
-        await Item.deleteOne({ _id: item._id });
+        await Item.deleteOne({ _id: itemId });
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to delete item: ${errorMessage}`);

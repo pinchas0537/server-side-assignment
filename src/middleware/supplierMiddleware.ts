@@ -1,10 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { getSupplierById, getSupplierByName } from "../services/supplierS.js";
+import { NextFunction, Request, Response } from "express";
+import { getSupplierById, getSupplierByName } from "../services/supplierService.js";
 
-export const isNsameUnique = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const isNameUnique = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { name } = req.body;
+        const {id} = req.params;
         if (!name) {
+            if (!id) {
+                res.status(400).json({ error: "Supplier name is required" });
+                return;
+            }
             return next();
         }
         const existingSupplier = await getSupplierByName(name);
@@ -14,7 +19,7 @@ export const isNsameUnique = async (req: Request, res: Response, next: NextFunct
         }
         next();
     } catch (error) {
-        res.status(500).json({ error: "Server error during name validation" });
+       next(error);
     }
 };
 
@@ -29,6 +34,6 @@ export const supplierExists = async (req: Request, res: Response, next: NextFunc
         res.locals.supplier = supplier;
         next();
     } catch (error) {
-        res.status(500).json({ error: "Internal server error during supplier validation" });
+        next(error);
     }
 };

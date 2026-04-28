@@ -13,8 +13,7 @@ const OrderSchema = new Schema<IOrder>(
         address: { type: String, required: true },
         orderDate: { type: Date, default: Date.now },
         shopProfit: { type: Number, required: true, min: 0 },
-    },
-    { timestamps: true }
+    }
 );
 
 export const OrderModel = model<IOrder>("Order", OrderSchema);

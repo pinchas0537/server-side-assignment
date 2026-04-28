@@ -6,7 +6,13 @@ import { Types } from "mongoose";
 export const validateOrderItems = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { items } = req.body;
-        const itemIds = items.map((item: { itemId: string }) => new Types.ObjectId(item.itemId));
+        const rawItemIds = items.map((item: { itemId: string }) => item.itemId)
+        const uniqueIdsString = [...new Set(rawItemIds)] as string[];
+        const itemIds = uniqueIdsString.map((id) => new Types.ObjectId(id));
+        if (itemIds.length !== uniqueIdsString.length) {
+            res.status(400).json({ error: "Duplicate item IDs are not allowed" });
+            return;
+        }
         const dbItems = (await Item.find({ _id: { $in: itemIds } }).lean()) as ISItem[];
         if (dbItems.length !== itemIds.length) {
             res.status(400).json({ error: "One or more items not found" });
@@ -15,6 +21,6 @@ export const validateOrderItems = async (req: Request, res: Response, next: Next
         res.locals.dbItems = dbItems;
         return next();
     } catch (error) {
-        res.status(500).json({ error: (error as Error).message });
+        next(error);
     }
 };

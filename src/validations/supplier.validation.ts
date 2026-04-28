@@ -2,7 +2,7 @@ import { z } from "zod";
 import { paramsIdSchema } from "./common.validation.js";
 
 const supplierSchema = z.object({
-    name: z.string().trim().min(2, "Name must be at least 2 characters long").optional(),
+    name: z.string().trim().min(2, "Name must be at least 2 characters long"),
     items: z
         .array(
             z.object({
@@ -15,16 +15,16 @@ const supplierSchema = z.object({
 });
 
 export const createSupplierSchema = z.object({
-    body: supplierSchema
+    body: supplierSchema,
 });
 
 export const updateSupplierSchema = z.object({
     params: paramsIdSchema,
-    body: supplierSchema.partial()
+    body: supplierSchema.partial(),
 });
 
 export const supplierIdSchema = z.object({
-    params: paramsIdSchema
+    params: paramsIdSchema,
 });
 
 export type ISupplier = z.infer<typeof supplierSchema>;

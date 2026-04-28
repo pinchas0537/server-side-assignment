@@ -6,11 +6,11 @@ export const validateRequest =
     (schema: z.ZodSchema) =>
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            schema.parseAsync({body:req.body, params:req.params});
+            schema.parseAsync({ body: req.body, params: req.params });
             return next();
         } catch (error) {
             if (error instanceof ZodError) {
-                logger.error(`Validation failed: ${JSON.stringify(error.issues)}`);
+                logger.warn(`Validation failed: ${JSON.stringify(error.issues)}`);
                 res.status(400).json({
                     error: "Validation failed",
                     details: error.issues.map((err) => ({
@@ -18,8 +18,9 @@ export const validateRequest =
                         message: err.message,
                     })),
                 });
+                return;
             } else {
-                res.status(500).json({ error: "Internal server error" });
+                next(error);
             }
         }
     };

@@ -1,10 +1,10 @@
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 
 export interface ISItem {
-    _id?: Schema.Types.ObjectId,
-    name: string,
-    consumerPrice: number,
-    stock: number,
-    category: string,
-    supplierId: Schema.Types.ObjectId
+    _id?: Types.ObjectId;
+    name: string;
+    consumerPrice: number;
+    stock: number;
+    category: string;
+    supplierId: Types.ObjectId;
 }

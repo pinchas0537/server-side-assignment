@@ -1,18 +1,17 @@
 import express from "express";
 import { connectDB } from "./config/db";
-import orderR from "./routers/orderR";
+import orderR from "./routers/orderRouter";
 import logger from "./utils/Logger";
-import itemR from "./routers/itemR";
-import supplierR from "./routers/supplierR";
-import analyticsR from "./routers/analyticsR";
-
+import itemR from "./routers/itemRouter";
+import supplierR from "./routers/supplierRouter";
+import analyticsR from "./routers/analyticsRouter";
+import cors from "cors";
+import { PORT } from "./config/env";
 
 const app = express();
 
-const PORT = 3000;
-
 app.use(express.json());
-
+app.use(cors());
 app.use((req: express.Request, _res: express.Response, next: express.NextFunction) => {
     logger.info("Incoming request", { method: req.method, url: req.url, IP: req.ip });
     next();
