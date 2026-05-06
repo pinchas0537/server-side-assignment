@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getSupplierById, getSupplierByName } from "../services/supplierService.js";
+import { getSupplierByName } from "../services/supplierService.js";
 import { Supplier } from "../models/Supplier.js";
 
 export const isNameUnique = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
