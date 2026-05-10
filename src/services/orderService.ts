@@ -20,7 +20,7 @@ export const processNewOrder = async (orderData: OrderBase | IOrder): Promise<IO
             ...orderData,
             shopProfit: totalProfit,
         });
-        const savedOrder = await finalOrder.save();
+        const savedOrder = await finalOrder.save({ session });
         for (const orderItem of orderData.items) {
             await updateItemStock(orderItem.itemId.toString(), orderItem.quantity, session);
         }
