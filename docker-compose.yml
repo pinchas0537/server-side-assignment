@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   backend:
     build: .
     restart: always
@@ -15,19 +16,26 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   db:
-    image: mongo:6.0
+    image: mongo:latest
     restart: always
     ports:
       - ${MONGO_PORT}:${MONGO_PORT}
+    volumes:
+      - mongo-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
       timeout: 5s
       retries: 3
       start_period: 10s
+
   frontend:
     build: ../client-side-assignment
     restart: always
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
+
+volumes:
+  mongo-data:
