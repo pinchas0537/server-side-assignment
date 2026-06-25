@@ -3,6 +3,7 @@ import {
     createNewItem,
     deleteItemById,
     getAllItemsInDB,
+    getItemByIdInDB,
     updateItemInDB,
     verifyProfitMargin,
 } from "../services/itemService.js";
@@ -15,7 +16,7 @@ export const createItem = async (req: Request, res: Response, next: NextFunction
     try {
         const itemData: ItemBase = req.body;
         const supplier = res.locals.supplier as ISupplier;
-        verifyProfitMargin({ name: itemData.name, supplierId: supplier }, itemData.consumerPrice!);
+        verifyProfitMargin({ name: itemData.name, supplier }, itemData.consumerPrice!);
         const newItem = await createNewItem(itemData);
         logger.info("Item created successfully", { itemId: newItem._id });
         res.status(201).json(newItem);
@@ -35,10 +36,11 @@ export const getAllItems = async (_req: Request, res: Response, next: NextFuncti
     }
 };
 
-export const getItemById = (_req: Request, res: Response, next: NextFunction): void => {
+export const getItemById = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const item = res.locals.item;
-        res.status(200).json(item);
+        const item: ISItem = res.locals.item;
+        const itemAndSupplier = await getItemByIdInDB(item._id.toString());
+        res.status(200).json(itemAndSupplier);
     } catch (error) {
         logger.error("Failed to fetch item", { error: (error as Error).message });
         next(error);
@@ -47,11 +49,12 @@ export const getItemById = (_req: Request, res: Response, next: NextFunction): v
 
 export const updateItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = req.params.id as string;
+        const id = res.locals.item._id
         const itemData: Partial<ItemBase> = req.body;
-        const currentItem = res.locals.item as ISItem & { supplierId: ISupplier };
+        const currentItem = res.locals.item as ISItem;
+        const supplier = res.locals.supplier as ISupplier
         if (itemData.consumerPrice !== undefined) {
-            verifyProfitMargin(currentItem, itemData.consumerPrice);
+            verifyProfitMargin({ name: currentItem.name, supplier }, itemData.consumerPrice);
         }
         const updatedItem = await updateItemInDB(id, itemData);
         res.status(200).json(updatedItem);

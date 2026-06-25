@@ -1,17 +1,16 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   backend:
     build: .
     restart: always
     ports:
-    - "${PORT}:${PORT}"
+      - "${PORT}:${PORT}"
     volumes:
       - .:/src/app
       - /src/app/node_modules
     environment:
-      - MONGO_URI=${MONGO_URI}
+      - MONGO_URI=${MONGO_URI_DOCKER}
       - PORT=${PORT}
     depends_on:
       db:
@@ -22,20 +21,39 @@ services:
     restart: always
     ports:
       - ${MONGO_PORT}:${MONGO_PORT}
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     volumes:
       - mongo-data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try { rs.status() } catch (e) { rs.initiate({_id: 'rs0', members: [{ _id: 0, host: 'db:27017' }]}) }"]
       interval: 5s
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  mongo-express:
+    image: mongo-express:latest
+    restart: always
+    ports: 
+      - ${MONGOE_EXPRESS_PORT}:${MONGOE_EXPRESS_PORT}
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_PORT=${MONGO_PORT}
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=pass
+    depends_on:
+      - db
 
   frontend:
     build: ../client-side-assignment
     restart: always
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
+    volumes:
+      - ../client-side-assignment:/src/main
+      - /src/main/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
 volumes:
   mongo-data:

@@ -28,7 +28,7 @@ app.use("/api/analytics", analyticsR);
 const startServer = async () => {
     try {
         await connectDB();
-        app.listen(PORT, () => {
+        app.listen(PORT, "0.0.0.0", () => {
             console.log(`Server is running on http://localhost:${PORT}`);
         });
     } catch (error) {

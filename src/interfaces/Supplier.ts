@@ -7,6 +7,7 @@ export interface ISupplierItem {
 }
 
 export interface ISupplier {
+    _id: Types.ObjectId;
     name: string;
     items: ISupplierItem[];
 }

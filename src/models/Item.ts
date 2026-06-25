@@ -3,7 +3,7 @@ import { ISItem } from "../interfaces/Item";
 
 const ItemSchema = new Schema<ISItem>(
     {
-        name: { type: String, required: true, unique: true, index: true },
+        name: { type: String, required: true },
         consumerPrice: { type: Number, required: true, min: 0 },
         stock: { type: Number, required: true, min: 0 },
         category: { type: String, required: true },
@@ -11,5 +11,7 @@ const ItemSchema = new Schema<ISItem>(
     },
     { timestamps: true }
 );
+
+ItemSchema.index({ name: 1, supplierId: 1 }, { unique: true });
 
 export const Item = model<ISItem>("Item", ItemSchema);
