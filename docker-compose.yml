@@ -48,7 +48,7 @@ services:
     build: ../client-side-assignment
     restart: always
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - "${CLIENT_PORT}:80"
     volumes:
       - ../client-side-assignment:/src/main
       - /src/main/node_modules

@@ -1,4 +1,4 @@
-import logger from "../utils/Logger";
+import logger from "../utils/Logger.js";
 import { Request, Response, NextFunction } from "express";
 import { ZodError, z } from "zod";
 

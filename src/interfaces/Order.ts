@@ -1,5 +1,5 @@
 import { Schema, Types } from "mongoose";
-import { OrderBase } from "../validations/order.validation";
+import { OrderBase } from "../validations/order.validation.js";
 export interface IOrderItem {
     itemId: Schema.Types.ObjectId;
     quantity: number;

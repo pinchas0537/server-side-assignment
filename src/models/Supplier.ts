@@ -1,6 +1,6 @@
 import { Schema, UpdateQuery, model } from "mongoose";
-import { ISupplier } from "../interfaces/Supplier";
-import { SUPPLIER_MARKUP_FACTOR } from "../utils/constants";
+import { ISupplier } from "../interfaces/Supplier.js";
+import { SUPPLIER_MARKUP_FACTOR } from "../utils/constants.js";
 
 const SupplierSchema = new Schema<ISupplier>(
     {

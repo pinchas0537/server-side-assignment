@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { ISupplier } from "../validations/supplier.validation";
+import { ISupplier } from "../validations/supplier.validation.js";
 
 export interface ISItem {
     _id: Types.ObjectId;
