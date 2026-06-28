@@ -1,22 +1,23 @@
 {
-  
   "name": "server-side-assignment",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "tsx watch src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/app.ts",
+    "start": "tsx src/app.ts",
+    "test": "echo \"No tests configured yet.\""
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/winston": "^2.4.4"
+    "@types/winston": "^2.4.4",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -24,7 +25,6 @@
     "env-var": "^7.5.0",
     "express": "^5.2.1",
     "mongoose": "^9.6.3",
-    "tsx": "^4.22.4",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   }

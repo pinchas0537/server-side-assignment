@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createItem, deleteItem, getItemById, getAllItems, updateItem } from "../controllers/item.controller";
-import { checkItemExists } from "../middleware/itemMiddleware";
-import { supplierExists } from "../middleware/supplierMiddleware";
-import { validateRequest } from "../middleware/validate";
-import { createItemSchema, itemIdSchema, updateItemSchema } from "../validations/item.validation";
+import { createItem, deleteItem, getItemById, getAllItems, updateItem } from "../controllers/item.controller.js";
+import { checkItemExists } from "../middleware/itemMiddleware.js";
+import { supplierExists } from "../middleware/supplierMiddleware.js";
+import { validateRequest } from "../middleware/validate.js";
+import { createItemSchema, itemIdSchema, updateItemSchema } from "../validations/item.validation.js";
 
 const router = Router();
 

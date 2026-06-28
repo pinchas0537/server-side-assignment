@@ -1,8 +1,9 @@
 import { ClientSession, startSession } from "mongoose";
-import { ISupplier, ISupplierItem } from "../interfaces/Supplier";
-import { Supplier } from "../models/Supplier";
-import { Item } from "../models/Item";
-import { CustomError } from "../interfaces/Error";
+import { ISupplier, ISupplierItem } from "../interfaces/Supplier.js";
+import { Supplier } from "../models/Supplier.js";
+import { Item } from "../models/Item.js";
+import { CustomError } from "../interfaces/Error.js";
+import { ISItem } from "../interfaces/Item.js";
 
 export const createNewSupplier = async (supplierData: Omit<ISupplier, "items">): Promise<ISupplier> => {
     try {
@@ -16,7 +17,7 @@ export const createNewSupplier = async (supplierData: Omit<ISupplier, "items">):
 
 export const getAllSuppliersInDB = async (): Promise<ISupplier[]> => {
     try {
-        return await Supplier.find().select("-__v").lean();
+        return await Supplier.find().select("-__v").lean() as unknown as ISupplier[];
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         throw new Error(`Failed to get all supplier: ${errorMessage}`);
@@ -27,7 +28,7 @@ export const getSupplierById = async (id: string): Promise<ISupplier | null> => 
     try {
         const supplier = (await Supplier.findById(id).select("-__v").lean()) as ISupplier | null;
         if (!supplier) return null;
-        const items = await Item.find({ supplierId: id }).select("-__v").lean();
+        const items = await Item.find({ supplierId: id }).select("-__v").lean() as unknown as ISItem[];
         const foratedItems: ISupplierItem[] = items.map((item) => ({
             _id: item._id,
             itemId: item._id.toString(),

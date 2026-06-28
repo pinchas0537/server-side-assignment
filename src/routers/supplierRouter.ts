@@ -5,10 +5,10 @@ import {
     getSupplierById,
     getAllSuppliers,
     updateSupplier,
-} from "../controllers/supplier.controller";
-import { isNameUnique, supplierExists } from "../middleware/supplierMiddleware";
-import { validateRequest } from "../middleware/validate";
-import { createSupplierSchema, supplierIdSchema, updateSupplierSchema } from "../validations/supplier.validation";
+} from "../controllers/supplier.controller.js";
+import { isNameUnique, supplierExists } from "../middleware/supplierMiddleware.js";
+import { validateRequest } from "../middleware/validate.js";
+import { createSupplierSchema, supplierIdSchema, updateSupplierSchema } from "../validations/supplier.validation.js";
 
 const router = Router();
 

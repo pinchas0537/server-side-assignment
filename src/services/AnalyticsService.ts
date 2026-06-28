@@ -1,5 +1,5 @@
-import { Item } from "../models/Item";
-import { OrderModel } from "../models/Order";
+import { Item } from "../models/Item.js";
+import { OrderModel } from "../models/Order.js";
 import { PipelineStage } from "mongoose";
 
 interface RevenueResult {

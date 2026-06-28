@@ -1,4 +1,4 @@
-# Full Stack Application - Server Side 🚀
+# Full Stack Application - Server Side
 
 **Technical Stack**
 * **Runtime:** Node.js

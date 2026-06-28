@@ -118,7 +118,7 @@ export const processOrderFinancials = async (orderItems: IOrderItemInput[]): Pro
         const dbItems: ISItem[] = await Item.find({ _id: { $in: itemIds } })
             .populate("supplierId")
             .select("-__v")
-            .lean();
+            .lean() as unknown as ISItem[]
         validateStock(dbItems, orderItems);
         const totalProfit = calculateOrderProfit(dbItems, orderItems);
         return totalProfit;
