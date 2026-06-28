@@ -24,11 +24,16 @@ export const verifySupplierExists = async (req: Request, res: Response, next: Ne
 export const checkItemExists = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const item = await Item.findById(id);
+        const item = await Item.findById(id).select("-__v -createdAt -updatedAt").lean();
+        const supplier = await Supplier.findById(item?.supplierId).select("-__v -createdAt -updatedAt").lean();
         if (!item) {
             return res.status(404).json({ error: "Item not found" });
         }
+        if (!supplier) {
+            return res.status(404).json({ error: "supplier not found" });
+        }
         res.locals.item = item;
+        res.locals.supplier = supplier
         return next();
     } catch (error) {
         next(error);

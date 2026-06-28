@@ -1,4 +1,4 @@
-# Full Stack Application - Server Side 🚀
+# Full Stack Application - Server Side
 
 **Technical Stack**
 * **Runtime:** Node.js
@@ -14,8 +14,17 @@
 * **Business Logic:** Centralized handling of application rules, data validation, and error management.
 * **Security:** Implementation of secure communication practices and data integrity checks.
 
-**Getting Started**
+**How to Run the Project**
+Set up your environment variables:
+Create a .env file in the root directory and define the following variables:
+PORT
+MONGO_URI
+MONGO_PORT
+CLIENT_PORT
+
 1. Clone the repository: `git clone https://github.com/pinchas0537/server-side-assignment`
-2. Install dependencies: `npm install`
-3. Set up your environment variables (.env).
-4. Start the server: `npm start`
+2. cd server-side-assignment
+3. docker compose up --build -d
+
+Stop the system:
+docker compose down

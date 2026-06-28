@@ -37,7 +37,7 @@ export const processNewOrder = async (orderData: OrderBase | IOrder): Promise<IO
 
 export const getAllOrdersInDB = async (): Promise<IOrder[]> => {
     try {
-        const orders = await OrderModel.find().select("-__v").lean();
+        const orders = await OrderModel.find().select("-__v").lean() as unknown as IOrder[];
         return orders;
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

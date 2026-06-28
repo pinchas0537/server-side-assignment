@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
+    "module": "nodenext",
+    "moduleResolution": "NodeNext",
+    "target": "es2022",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist/",
+    "rootDir": "./src",
     "allowJs": false,
     "sourceMap": true,
     "removeComments": true,
@@ -17,7 +22,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist/"
   },
   "include": ["src/**/*"]
 }

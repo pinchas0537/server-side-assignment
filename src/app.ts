@@ -1,12 +1,12 @@
 import express from "express";
-import { connectDB } from "./config/db";
-import orderR from "./routers/orderRouter";
-import logger from "./utils/Logger";
-import itemR from "./routers/itemRouter";
-import supplierR from "./routers/supplierRouter";
-import analyticsR from "./routers/analyticsRouter";
+import { connectDB } from "./config/db.js";
+import orderR from "./routers/orderRouter.js";
+import logger from "./utils/Logger.js";
+import itemR from "./routers/itemRouter.js";
+import supplierR from "./routers/supplierRouter.js";
+import analyticsR from "./routers/analyticsRouter.js";
 import cors from "cors";
-import { PORT } from "./config/env";
+import { PORT } from "./config/env.js";
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use("/api/analytics", analyticsR);
 const startServer = async () => {
     try {
         await connectDB();
-        app.listen(PORT, () => {
+        app.listen(PORT, "0.0.0.0", () => {
             console.log(`Server is running on http://localhost:${PORT}`);
         });
     } catch (error) {
